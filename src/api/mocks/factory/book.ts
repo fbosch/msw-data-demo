@@ -25,5 +25,5 @@ export const book = <Record<keyof Book, any>>{
   language: arrayElement(languages),
   price: price,
   author: oneOf('author'),
-  // ratings: manyOf('rating')
+  ratings: manyOf('rating')
 }
