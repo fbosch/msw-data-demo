@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { useRatings } from '../api/hooks/useRatings'
 import { Book } from '../api/view-models/Book'
 import { Dialog } from '@headlessui/react'
+import { BookItem } from './BookItem'
 
 
 export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen: boolean, onClose: (toggle: boolean) => void }) {
@@ -31,7 +32,7 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
       }>
         <div className='flex space-x-10'>
           <div>
-            <img src={imageUrl} loading='lazy' className='object-cover rounded h-[300px] w-[200px]' />
+            <BookItem book={book} onClick={() => { }} className='h-[300px] w-[200px]' />
             <div className='text-3xl mt-4 text-gray-200 align-middle flex items-center'>{stars} <span className='text-gray-300 text-xl ml-3'>({ratings?.length})</span></div>
           </div>
           <div>
