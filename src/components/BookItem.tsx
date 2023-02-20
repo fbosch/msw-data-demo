@@ -22,7 +22,7 @@ export function BookItem({ book, onClick, className }: { book?: Book | null, onC
         seededBackgroundClassName(book)
       )}>
         {book.title}
-        <span className='block text-[8px]'> by {book.author?.firstName} {book.author?.lastName}</span>
+        <span className='block text-[8px] opacity-70'> by {book.author?.firstName} {book.author?.lastName}</span>
       </div>
     </div>
   )
@@ -40,12 +40,12 @@ const fontStyle = [
 ]
 
 const weight = [
-  'font-thin',
-  'font-extralight',
+  'font-thin leading-snug',
+  'font-extralight leading-4',
   'font-light',
   'font-normal',
   'font-medium',
-  'font-semibold',
+  'font-semibold leading-wide',
   'font-bold',
 ]
 

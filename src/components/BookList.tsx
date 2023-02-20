@@ -11,7 +11,7 @@ export default function BookList() {
 
   return (
     <div className="max-w-[1100px] mx-auto">
-      <h1 className="font-serif text-4xl ml-4 pt-10">Books</h1>
+      <h1 className="font-serif text-4xl ml-4 pt-10">📚 Books</h1>
       <hr className='my-5' />
       <BookModal book={activeBook} isOpen={Boolean(activeBook)} onClose={() => { setActiveBook(null) }} />
       <ol className="grid grid-cols-5 gap-8 p-4 mx-auto">
