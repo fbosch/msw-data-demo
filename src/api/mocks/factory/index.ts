@@ -37,6 +37,7 @@ export function initialize() {
         rating: number({ min: 1, max: 5 }) // Generate a random rating between 1 and 5
       })
     })
+
     const sum = bookRatings.reduce((sum, rating) => sum + rating.rating, 0)
     // Calculate the average rating for the book
     const avgRating = bookRatings.length > 0 ? sum / bookRatings.length : 0
@@ -50,7 +51,8 @@ export function initialize() {
         }
       },
       data: {
-        avgRating: avgRating
+        avgRating: avgRating,
+        amountOfRatings: bookRatings.length
       }
     })
 

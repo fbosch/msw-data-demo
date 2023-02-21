@@ -1,7 +1,7 @@
 import clsx from 'clsx'
+import memoize from 'lodash.memoize'
 import { Book } from '../api/view-models/Book'
 import { arrayElement } from 'minifaker'
-import memoize from 'lodash.memoize'
 
 
 export function BookItem({ book, onClick, className }: { book?: Book | null, onClick: () => void, className?: string }) {
@@ -11,7 +11,7 @@ export function BookItem({ book, onClick, className }: { book?: Book | null, onC
       "bg-cover bg-gray-50 h-[250px] width-[150px] font-serif",
       "flex flex-col px-4 drop-shadow-md rounded-r-md border-r-4 border-yellow-50",
       className,
-      seededClassNames(book)
+      seededClassNames(book.id)
     )}
       style={{ backgroundImage: `url("${book.imageUrl}")` }}
       onClick={onClick}
@@ -19,10 +19,10 @@ export function BookItem({ book, onClick, className }: { book?: Book | null, onC
       <div className={clsx(
         "text-gray-800 text-center ",
         "px-2 py-1 basis-0 ",
-        seededBackgroundClassName(book)
+        seededBackgroundClassName(book.id)
       )}>
         {book.title}
-        <span className='block text-[8px] opacity-70'> by {book.author?.firstName} {book.author?.lastName}</span>
+        <span className='block text-[8px] opacity-70'>{book.author?.firstName} {book.author?.lastName}</span>
       </div>
     </div>
   )
@@ -51,6 +51,7 @@ const weight = [
 
 const backgrounds = [
   'bg-white outline-double outline-white border-gray-300 border-2',
+  'bg-white rounded-lg p-2',
   'bg-gray-50 outline-double outline-gray-50 border-gray-300 border-2',
   'bg-black outline-double outline-black border-gray-300 border-2 text-white',
   'transparent text-white text-shadow-md',
@@ -58,7 +59,7 @@ const backgrounds = [
 ]
 
 
-const seededClassNames = memoize((book: Book) => {
+const seededClassNames = memoize((bookId: string) => {
   return [
     arrayElement(justification),
     arrayElement(fontStyle),
@@ -66,7 +67,7 @@ const seededClassNames = memoize((book: Book) => {
   ].join(' ')
 })
 
-const seededBackgroundClassName = memoize((book: Book) => {
+const seededBackgroundClassName = memoize((bookId: string) => {
   return [
     arrayElement(backgrounds)
   ].join(' ')

@@ -7,5 +7,5 @@ export const author = <Record<keyof Author, any>>{
   firstName: firstName,
   lastName: lastName,
   birthday: nullable(() => date({ from: new Date(1900, 0, 1), to: new Date(1999, 0, 1) })),
-  imageUrl: () => `https://api.lorem.space/image/face?w=150&h=350&hash=${uuid.v4()}`
+  imageUrl: () => `https://api.lorem.space/image/face?w=50&h=50&hash=${uuid.v4()}`
 }

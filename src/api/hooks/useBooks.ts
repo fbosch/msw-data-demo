@@ -1,6 +1,12 @@
 import { useQuery } from '@tanstack/react-query';
 import { Book } from '../view-models/Book';
 
-export function useBooks() {
-  return useQuery<Book[]>(['books'], () => fetch('/books').then((res) => res.json()));
-}
+export function useBooks(search: string) {
+  return useQuery<Book[]>(
+    ['books', search],
+    () => fetch('/books' + (search && search !== '' ? `?q=${search}` : '')).then((res) => res.json()),
+    {
+      keepPreviousData: true,
+    }
+  );
+} 
