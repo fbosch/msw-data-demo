@@ -51,7 +51,7 @@ const weight = [
 
 const backgrounds = [
   'bg-white outline-double outline-white border-gray-300 border-2',
-  'bg-white rounded-lg p-2',
+  'bg-white/70 rounded-lg p-2',
   'bg-gray-50 outline-double outline-gray-50 border-gray-300 border-2',
   'bg-black outline-double outline-black border-gray-300 border-2 text-white',
   'transparent text-white text-shadow-md',

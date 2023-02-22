@@ -4,23 +4,30 @@ import { useState, useTransition } from 'react'
 import { useBooks } from '../api/hooks/useBooks';
 import { BookItem } from './BookItem';
 import { BookModal } from './BookModal';
+import { AddBookModal } from './AddBookModal';
 
 export default function BookList() {
-  const [isPending, startTransition] = useTransition();
+  const [_, startTransition] = useTransition();
   const [search, setSearch] = useState('');
   const { data: books } = useBooks(search)
   const [activeBook, setActiveBook] = useState<Book | null>(null)
+  const [showAddBookModal, setShowAddBookModal] = useState(false)
 
   return (
     <div className="max-w-[1100px] mx-auto">
       <div className='flex justify-between items-center pt-10 '>
-        <h1 className="font-serif text-4xl ml-4 flex-1">📚 Books</h1>
+        <h1 className="font-serif text-4xl ml-4 flex-1">📚 Library</h1>
         <input type='search' className='border rounded h-12 flex-1 p-4' placeholder='Search' onChange={(event) => {
           startTransition(() => {
             setSearch(event.target.value)
           })
         }} />
-        <span className='flex-1' />
+        <div className='flex-1 flex justify-end'>
+          <button className='rounded text-white bg-blue-300 h-10 w-10 text-lg' title='Add book' onClick={() => {
+            setShowAddBookModal(true)
+          }} >+</button>
+          <AddBookModal isOpen={showAddBookModal} onClose={() => setShowAddBookModal(false)} />
+        </div>
       </div>
       <hr className='my-5' />
       <BookModal book={activeBook} isOpen={Boolean(activeBook)} onClose={() => { setActiveBook(null) }} />

@@ -8,7 +8,7 @@ import { BookItem } from './BookItem'
 
 export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen: boolean, onClose: (toggle: boolean) => void }) {
 
-  const { data: ratings, isSuccess } = useRatings(book?.id)
+  const { data: ratings, isSuccess } = useRatings(book?.id, isOpen)
   const { title, description, avgRating, amountOfRatings, author } = book || {}
   const [showCommentFields, setShowCommentFields] = useState(false)
 

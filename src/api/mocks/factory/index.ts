@@ -13,6 +13,7 @@ export const db = factory({
 })
 
 export function initialize() {
+  console.log('initialize!')
   // Reset the database
   drop(db)
 
