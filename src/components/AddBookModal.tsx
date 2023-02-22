@@ -19,6 +19,7 @@ export function AddBookModal({ isOpen, onClose }: { isOpen: boolean, onClose: (t
   }), {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] })
+      onClose(false)
     }
   })
 
@@ -26,12 +27,10 @@ export function AddBookModal({ isOpen, onClose }: { isOpen: boolean, onClose: (t
     event.preventDefault()
     const formData = new FormData(event.target)
     const values = Object.fromEntries(formData.entries()) as any
-    const author = authors?.find(author => author.id === values.author)
     mutate({
-      ...values,
-      author
+      ...values
     })
-  }, [mutate])
+  }, [mutate, authors])
 
   return (
     <Dialog open={isOpen && isSuccess} onClose={(toggle) => {
@@ -65,7 +64,7 @@ export function AddBookModal({ isOpen, onClose }: { isOpen: boolean, onClose: (t
           </div>
           <div>
             <label htmlFor='bookAuthor'>Author</label>
-            <select id='bookAuthor' className='border rounded w-full p-2' name='author' defaultValue='' required>
+            <select id='bookAuthor' className='border rounded w-full p-2' name='authorId' defaultValue='' required>
               <option value='' disabled />
               {authors?.map((author) => (
                 <option value={author.id} key={author?.id}>{author?.firstName} {author?.lastName}</option>

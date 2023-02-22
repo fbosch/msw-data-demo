@@ -25,7 +25,7 @@ export function initialize() {
   // Generate 20 books and assign them to a random author
   const books = Array.from({ length: 20 }).map(() => {
     const author = arrayElement(authors) // Pick a random author
-    return db.book.create({ author })
+    return db.book.create({ author, authorId: author.id })
   })
 
   // Generate 0-15 ratings for each book

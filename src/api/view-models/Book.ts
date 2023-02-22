@@ -8,6 +8,7 @@ export interface Book {
   description: string;
   imageUrl: string;
   author: Author;
+  authorId: string;
   amountOfRatings: number;
   avgRating: number;
   price: number;

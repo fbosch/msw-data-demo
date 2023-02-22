@@ -7,12 +7,14 @@ import { arrayElement } from 'minifaker'
 export function BookItem({ book, onClick, className }: { book?: Book | null, onClick: () => void, className?: string }) {
   if (!book) return null
   return (
-    <div className={clsx(
-      "bg-cover bg-gray-50 h-[250px] width-[150px] font-serif",
-      "flex flex-col px-4 drop-shadow-md rounded-r-md border-r-4 border-yellow-50",
-      className,
-      seededClassNames(book.id)
-    )}
+    <div
+      data-book-id={book.id}
+      className={clsx(
+        "bg-cover bg-gray-50 h-[250px] width-[150px] font-serif",
+        "flex flex-col px-4 drop-shadow-md rounded-r-md border-r-4 border-yellow-50",
+        className,
+        seededClassNames(book.id)
+      )}
       style={{ backgroundImage: `url("${book.imageUrl}")` }}
       onClick={onClick}
     >

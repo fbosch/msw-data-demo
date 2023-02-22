@@ -2,11 +2,13 @@ import clsx from 'clsx'
 import { useState } from 'react'
 import { useRatings } from '../api/hooks/useRatings'
 import { Book } from '../api/view-models/Book'
+import { Author } from '../api/view-models/Author'
 import { Dialog } from '@headlessui/react'
 import { BookItem } from './BookItem'
+import { useAuthors } from '../api/hooks/useAuthors'
 
 
-function getStars(rating: number) {
+function renderStars(rating: number) {
   const filledStars = Array.from({ length: Math.floor(rating ?? 0) })
   const emptyStars = Array.from({ length: 5 - filledStars.length })
   const stars = [...filledStars.map(() => '⭐'), ...emptyStars.map(() => '☆')].join('')
@@ -17,17 +19,17 @@ const perPage = 3
 export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen: boolean, onClose: (toggle: boolean) => void }) {
 
   const [page, setPage] = useState(1)
+  const { data: authorData } = useAuthors(book?.authorId, !book?.author)
   const { data: ratings, isSuccess, isFetching, isPreviousData } = useRatings(book?.id, page, perPage, isOpen)
-  const { title, description, avgRating, amountOfRatings, author } = book || {}
-  const [showCommentFields, setShowCommentFields] = useState(false)
+  const { title, description, avgRating, amountOfRatings = 0 } = book || {}
   const amountOfPages = Math.ceil(Number(amountOfRatings) / perPage)
+  const author = book?.author || (authorData as Author)
 
   return (
     <Dialog
       key={book?.id}
       open={isOpen && isSuccess}
       onClose={(toggle) => {
-        setShowCommentFields(false)
         setPage(1)
         onClose(toggle)
       }}
@@ -44,7 +46,7 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
           <div>
             <BookItem book={book} onClick={() => { }} className='h-[300px] w-[200px]' />
             <div className='text-3xl mt-4 text-gray-200 align-middle flex items-center'>
-              {getStars(Number(avgRating))}
+              {renderStars(Number(avgRating))}
               <span className='text-gray-300 text-xl ml-3'>({amountOfRatings})</span>
             </div>
           </div>
@@ -62,16 +64,6 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
           </div>
         </div>
         <hr className='my-5' />
-        {showCommentFields ? (
-          <>
-            <div className='flex flex-col space-y-2 w-1/2'>
-              <input type='text' className='border rounded  p-3' placeholder='Title' />
-              <textarea className='rounded border  h-[100px] p-3' placeholder='Description' />
-              <button className='bg-blue-500 p-4 text-lg text-white rounded'>Submit</button>
-            </div>
-            <hr className='my-5' />
-          </>)
-          : <button className='bg-blue-400 p-2 text-md text-white rounded' onClick={() => setShowCommentFields(true)}>Add Review</button>}
         <ol className={clsx('flex flex-col space-y-4 mt-1 transition-opacity', {
           'opacity-10 cursor-wait grayscale': isFetching && isPreviousData,
         })}>
@@ -80,7 +72,7 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
               <h3 className='text-lg'>{rating.title}</h3>
               <p className='text-gray-500'>{rating.comment}</p>
               <div className='text-gray-200'>
-                {getStars(rating.rating)}
+                {renderStars(rating.rating)}
               </div>
             </li>
           ))}
