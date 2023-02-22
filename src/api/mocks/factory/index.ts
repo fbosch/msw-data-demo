@@ -23,7 +23,7 @@ export function initialize() {
   const authors = Array.from({ length: 30 }).map(() => db.author.create())
 
   // Generate 20 books and assign them to a random author
-  const books = Array.from({ length: 100 }).map(() => {
+  const books = Array.from({ length: 20 }).map(() => {
     const author = arrayElement(authors) // Pick a random author
     return db.book.create({ author })
   })

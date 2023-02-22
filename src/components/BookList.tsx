@@ -30,7 +30,7 @@ export default function BookList() {
         </div>
       </div>
       <hr className='my-5' />
-      <BookModal book={activeBook} isOpen={Boolean(activeBook)} onClose={() => { setActiveBook(null) }} />
+      <BookModal book={activeBook} isOpen={Boolean(activeBook)} onClose={() => { setActiveBook(null) }} key={activeBook?.id} />
       <ol className="grid grid-cols-5 gap-8 p-4 mx-auto">
         {books?.map((book) => (<li key={book.id}>
           <BookItem book={book} onClick={() => setActiveBook(book)}

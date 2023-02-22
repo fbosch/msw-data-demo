@@ -17,17 +17,20 @@ const perPage = 3
 export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen: boolean, onClose: (toggle: boolean) => void }) {
 
   const [page, setPage] = useState(1)
-  const { data: ratings, isSuccess, isFetching } = useRatings(book?.id, page, perPage, isOpen)
+  const { data: ratings, isSuccess, isFetching, isPreviousData } = useRatings(book?.id, page, perPage, isOpen)
   const { title, description, avgRating, amountOfRatings, author } = book || {}
   const [showCommentFields, setShowCommentFields] = useState(false)
-  const amountOfPages = Number(amountOfRatings) / perPage
+  const amountOfPages = Math.ceil(Number(amountOfRatings) / perPage)
 
   return (
-    <Dialog open={isOpen && isSuccess} onClose={(toggle) => {
-      setShowCommentFields(false)
-      setPage(1)
-      onClose(toggle)
-    }}
+    <Dialog
+      key={book?.id}
+      open={isOpen && isSuccess}
+      onClose={(toggle) => {
+        setShowCommentFields(false)
+        setPage(1)
+        onClose(toggle)
+      }}
       className="fixed top-0 right-0 z-[100] grid h-screen backdrop-blur w-screen items-center justify-center p-10"
     >
       <div
@@ -70,7 +73,7 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
           </>)
           : <button className='bg-blue-400 p-2 text-md text-white rounded' onClick={() => setShowCommentFields(true)}>Add Review</button>}
         <ol className={clsx('flex flex-col space-y-4 mt-1 transition-opacity', {
-          'opacity-10 cursor-wait grayscale': isFetching,
+          'opacity-10 cursor-wait grayscale': isFetching && isPreviousData,
         })}>
           {ratings?.map(rating => (
             <li key={rating.id} className='border-b py-2'>
@@ -82,20 +85,22 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
             </li>
           ))}
         </ol>
-        <nav className='mt-4 flex justify-center'>
-          <ol className='space-x-2'>
-            {Array.from({ length: amountOfPages }).map((_, index) => (
-              <li key={index} className='inline-block'>
-                <button
-                  className='cursor-pointer border p-2 w-10 h-10 rounded aria-selected:bg-blue-300 aria-selected:text-white'
-                  aria-selected={index + 1 === page}
-                  onClick={() => setPage(index + 1)}
-                >
-                  {index + 1}
-                </button>
-              </li>))}
-          </ol>
-        </nav>
+        {amountOfPages > 1 ? (
+          <nav className='mt-4 flex justify-center' role='navigation'>
+            <ol className='space-x-2'>
+              {Array.from({ length: amountOfPages }).map((_, index) => (
+                <li key={index} className='inline-block'>
+                  <button
+                    className='cursor-pointer border p-2 w-10 h-10 rounded aria-selected:bg-blue-300 aria-selected:text-white'
+                    aria-selected={index + 1 === page}
+                    onClick={() => setPage(index + 1)}
+                  >
+                    {index + 1}
+                  </button>
+                </li>))}
+            </ol>
+          </nav>
+        ) : null}
       </Dialog.Panel>
     </Dialog>
   )

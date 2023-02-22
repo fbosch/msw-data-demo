@@ -29,7 +29,7 @@ export const handlers = [
           bookId: { equals: bookId }
         },
         take: perPage,
-        skip: perPage * (page ? parseInt(page) : 0)
+        skip: perPage * (page ? parseInt(page) - 1 : 0)
       })
       return res(ctx.delay(500), ctx.json(ratingsForBook))
     }
