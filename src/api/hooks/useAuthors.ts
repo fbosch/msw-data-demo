@@ -7,6 +7,7 @@ export function useAuthors() {
     () => fetch('/authors').then((res) => res.json()),
     {
       keepPreviousData: true,
+      refetchOnWindowFocus: false,
     }
   );
 } 

@@ -6,19 +6,26 @@ import { Dialog } from '@headlessui/react'
 import { BookItem } from './BookItem'
 
 
-export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen: boolean, onClose: (toggle: boolean) => void }) {
-
-  const { data: ratings, isSuccess } = useRatings(book?.id, isOpen)
-  const { title, description, avgRating, amountOfRatings, author } = book || {}
-  const [showCommentFields, setShowCommentFields] = useState(false)
-
-  const filledStars = Array.from({ length: Math.floor(avgRating ?? 0) })
+function getStars(rating: number) {
+  const filledStars = Array.from({ length: Math.floor(rating ?? 0) })
   const emptyStars = Array.from({ length: 5 - filledStars.length })
   const stars = [...filledStars.map(() => '⭐'), ...emptyStars.map(() => '☆')].join('')
+  return stars
+}
+
+const perPage = 3
+export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen: boolean, onClose: (toggle: boolean) => void }) {
+
+  const [page, setPage] = useState(1)
+  const { data: ratings, isSuccess, isFetching } = useRatings(book?.id, page, perPage, isOpen)
+  const { title, description, avgRating, amountOfRatings, author } = book || {}
+  const [showCommentFields, setShowCommentFields] = useState(false)
+  const amountOfPages = Number(amountOfRatings) / perPage
 
   return (
     <Dialog open={isOpen && isSuccess} onClose={(toggle) => {
       setShowCommentFields(false)
+      setPage(1)
       onClose(toggle)
     }}
       className="fixed top-0 right-0 z-[100] grid h-screen backdrop-blur w-screen items-center justify-center p-10"
@@ -34,7 +41,7 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
           <div>
             <BookItem book={book} onClick={() => { }} className='h-[300px] w-[200px]' />
             <div className='text-3xl mt-4 text-gray-200 align-middle flex items-center'>
-              {stars}
+              {getStars(Number(avgRating))}
               <span className='text-gray-300 text-xl ml-3'>({amountOfRatings})</span>
             </div>
           </div>
@@ -62,6 +69,33 @@ export function BookModal({ book, isOpen, onClose }: { book: Book | null, isOpen
             <hr className='my-5' />
           </>)
           : <button className='bg-blue-400 p-2 text-md text-white rounded' onClick={() => setShowCommentFields(true)}>Add Review</button>}
+        <ol className={clsx('flex flex-col space-y-4 mt-1 transition-opacity', {
+          'opacity-10 cursor-wait grayscale': isFetching,
+        })}>
+          {ratings?.map(rating => (
+            <li key={rating.id} className='border-b py-2'>
+              <h3 className='text-lg'>{rating.title}</h3>
+              <p className='text-gray-500'>{rating.comment}</p>
+              <div className='text-gray-200'>
+                {getStars(rating.rating)}
+              </div>
+            </li>
+          ))}
+        </ol>
+        <nav className='mt-4 flex justify-center'>
+          <ol className='space-x-2'>
+            {Array.from({ length: amountOfPages }).map((_, index) => (
+              <li key={index} className='inline-block'>
+                <button
+                  className='cursor-pointer border p-2 w-10 h-10 rounded aria-selected:bg-blue-300 aria-selected:text-white'
+                  aria-selected={index + 1 === page}
+                  onClick={() => setPage(index + 1)}
+                >
+                  {index + 1}
+                </button>
+              </li>))}
+          </ol>
+        </nav>
       </Dialog.Panel>
     </Dialog>
   )

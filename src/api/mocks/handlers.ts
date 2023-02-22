@@ -20,14 +20,18 @@ export const handlers = [
   ...db.book.toHandlers("rest"), // localhost:3000/books
   rest.get('/ratings', (req, res, ctx) => {
     const bookId = req.url.searchParams.get('bookId')
+    const page = req.url.searchParams.get('page')
+    const perPage = Number(req.url.searchParams.get('perPage'))
     // take over handling of the rating resource if bookId is present
     if (bookId) {
       const ratingsForBook = db.rating.findMany({
         where: {
           bookId: { equals: bookId }
         },
+        take: perPage,
+        skip: perPage * (page ? parseInt(page) : 0)
       })
-      return res(ctx.delay(200), ctx.json(ratingsForBook))
+      return res(ctx.delay(500), ctx.json(ratingsForBook))
     }
   }),
   ...db.rating.toHandlers("rest"), // localhost:3000/ratings

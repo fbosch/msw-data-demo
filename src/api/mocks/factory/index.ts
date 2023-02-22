@@ -13,7 +13,6 @@ export const db = factory({
 })
 
 export function initialize() {
-  console.log('initialize!')
   // Reset the database
   drop(db)
 
@@ -33,9 +32,29 @@ export function initialize() {
   const ratings = books.map((book) => {
     const amountOfRatings = number({ min: 0, max: 15 }) // Decide how many ratings to generate
     const bookRatings = Array.from({ length: amountOfRatings }).map(() => {
+      const rating = number({ min: 1, max: 5 })
+
+      const title = [
+        'Not good',
+        'Good',
+        'Very good',
+        'Great',
+        'Excellent'
+      ][rating - 1]
+
+      const comment = [
+        'I didn\'t like it',
+        'I liked it',
+        'I loved it',
+        'A great book',
+        'Amazing!'
+      ][rating - 1]
+
       return db.rating.create({
         bookId: book.id, // Assign the rating to the book
-        rating: number({ min: 1, max: 5 }) // Generate a random rating between 1 and 5
+        title,
+        comment,
+        rating
       })
     })
 
