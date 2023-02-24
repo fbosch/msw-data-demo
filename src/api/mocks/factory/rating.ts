@@ -1,5 +1,3 @@
-
-
 import { primaryKey, nullable } from '@mswjs/data'
 import { Rating } from '../../view-models/Rating'
 import { arrayElement, uuid } from 'minifaker'

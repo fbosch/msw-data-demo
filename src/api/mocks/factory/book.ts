@@ -1,5 +1,5 @@
 import { Book } from '../../view-models/Book'
-import { primaryKey, nullable, oneOf } from '@mswjs/data'
+import { primaryKey, oneOf } from '@mswjs/data'
 import { uuid, jobTitle, arrayElement, price, number } from 'minifaker'
 
 const languages: string[] = [
@@ -23,7 +23,7 @@ export const book = <Record<keyof Book, any>>{
   title: jobTitle,
   language: arrayElement(languages),
   price: price,
-  author: nullable(oneOf('author')),
+  author: oneOf('author'),
   authorId: String,
   amountOfRatings: 0,
   avgRating: 0,
@@ -42,5 +42,4 @@ nisi ut aliquid ex ea commodi consequatur? quis autem vel eum iure reprehenderit
 vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?
 `,
   imageUrl: () => `https://picsum.photos/id/${number({ min: 1, max: 249 })}/350/250`,
-  // imageUrl: () => `https://api.lorem.space/image/book?w=250&h=350&hash=${ash()}`
 }

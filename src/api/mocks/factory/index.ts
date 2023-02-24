@@ -59,6 +59,7 @@ export function initialize() {
     })
 
     const sum = bookRatings.reduce((sum, rating) => sum + rating.rating, 0)
+
     // Calculate the average rating for the book
     const avgRating = bookRatings.length > 0 ? sum / bookRatings.length : 0
 
@@ -78,7 +79,6 @@ export function initialize() {
 
     return bookRatings
   })
-
 
   console.log({ authors, books, ratings })
 }

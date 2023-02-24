@@ -1,8 +1,8 @@
-
 import clsx from 'clsx'
 import queryClient from '../queryClient'
 import { useMutation } from '@tanstack/react-query'
 import { Book } from '../api/view-models/Book'
+import { Author } from '../api/view-models/Author'
 import { Dialog } from '@headlessui/react'
 import { useAuthors } from '../api/hooks/useAuthors'
 import { useCallback } from 'react';
@@ -17,6 +17,7 @@ export function AddBookModal({ isOpen, onClose }: { isOpen: boolean, onClose: (t
     body: JSON.stringify(variables),
     method: 'POST'
   }), {
+    mutationKey: ['addBook'],
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['books'] })
       onClose(false)
@@ -66,7 +67,7 @@ export function AddBookModal({ isOpen, onClose }: { isOpen: boolean, onClose: (t
             <label htmlFor='bookAuthor'>Author</label>
             <select id='bookAuthor' className='border rounded w-full p-2' name='authorId' defaultValue='' required>
               <option value='' disabled />
-              {authors?.map((author) => (
+              {(authors as Author[])?.map((author) => (
                 <option value={author.id} key={author?.id}>{author?.firstName} {author?.lastName}</option>
               ))}
             </select>
